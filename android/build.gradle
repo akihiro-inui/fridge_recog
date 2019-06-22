@@ -1,3 +1,6 @@
+group 'sq.flutter.tflite'
+version '1.0-SNAPSHOT'
+
 buildscript {
     repositories {
         google()
@@ -5,25 +8,36 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
     }
 }
 
-allprojects {
+rootProject.allprojects {
     repositories {
         google()
         jcenter()
     }
 }
 
-rootProject.buildDir = '../build'
-subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(':app')
-}
+apply plugin: 'com.android.library'
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+android {
+    
+    aaptOptions {
+        noCompress 'tflite'
+        noCompress 'lite'
+    }
+    compileSdkVersion 27
+
+    defaultConfig {
+        minSdkVersion 19
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
+    dependencies {
+        compile 'org.tensorflow:tensorflow-lite:+'
+    }
 }
